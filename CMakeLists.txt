@@ -6,15 +6,29 @@ include(./cmake/functions.txt)
 set(NAME RTClib)
 
 # Files
-file(GLOB_RECURSE FILES_CPP "*.cpp")
-file(GLOB_RECURSE FILES_H "*.h")
+file(GLOB_RECURSE ${NAME}_FILES_CPP "*.cpp")
+file(GLOB_RECURSE ${NAME}_FILES_H "*.h")
 
 # Ignore some files
 include(./cmake/ignore.txt)
 
-# Define library
-project("lib${NAME}")
-add_library(${NAME} ${FILES_CPP} ${FILES_H})
+# ARDUINO MODE
+if (ARDUINO_FOUND)
+    # Declare arduino library
+    generate_arduino_library(
+        ${NAME}
+        SRCS ${${NAME}_FILES_CPP}
+        HDRS ${${NAME}_FILES_H}
+        BOARD ${BOARD}
+        ARDLIBS Wire
+#        NO_AUTOLIBS
+    )
+# OTHER MODE (Raspberry)
+else()
+    # Define library
+    project("lib${NAME}")
+    add_library(${NAME} ${${NAME}_FILES_CPP} ${${NAME}_FILES_H})
+endif()
 
 # Compiler
 set_property(TARGET ${NAME} PROPERTY CXX_STANDARD 11)

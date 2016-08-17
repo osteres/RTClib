@@ -1,4 +1,4 @@
 
 # Remove no needed directories
-remove_path(FILES_CPP /examples/)
-remove_path(FILES_H /examples/)
+remove_path(${NAME}_FILES_CPP /examples/)
+remove_path(${NAME}_FILES_H /examples/)
